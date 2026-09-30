@@ -112,12 +112,16 @@ fn format_cpu_time() -> String {
             let idle_thread = scheduler::get_idle_thread(cpu_id);
             #[cfg(thread_stats)]
             let idle_cycle = if idle_thread.state() == thread::RUNNING {
-                idle_thread.get_cycles() + total_cycle - idle_thread.start_cycles()
+                // Another CPU can restart its idle thread after total_cycle is sampled.
+                idle_thread
+                    .get_cycles()
+                    .saturating_add(total_cycle.saturating_sub(idle_thread.start_cycles()))
             } else {
                 idle_thread.get_cycles()
             };
             #[cfg(not(thread_stats))]
             let idle_cycle = 0;
+            let idle_cycle = idle_cycle.min(total_cycle);
             let system_time =
                 time::from_clock_cycles(total_cycle.saturating_sub(idle_cycle)).as_millis() / 10; // 10ms
             let idle_time = time::from_clock_cycles(idle_cycle).as_millis() / 10;

@@ -157,9 +157,9 @@ impl ThreadStats {
     }
 
     pub fn increment_cycles(&self, cycles: u64) {
-        let cycles = self.get_cycles();
+        let elapsed = cycles.saturating_sub(self.start.get());
         self.cycles
-            .set(cycles + cycles.saturating_sub(self.start.get()));
+            .set(self.get_cycles().saturating_add(elapsed));
     }
 
     pub fn set_start_cycles(&self, start: u64) {
