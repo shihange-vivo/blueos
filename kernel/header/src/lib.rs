@@ -14,6 +14,10 @@
 
 #![no_std]
 
+pub mod application;
+
+pub mod dlfcn;
+
 pub mod syscalls {
     //! BlueOS's syscall calling convention is compatible with Linux.
     // FIXME: We should really consider stable syscall nr.
@@ -31,6 +35,7 @@ pub mod syscalls {
         AtomicWake,
         AllocMem,
         FreeMem,
+        ReallocMem,
         Write,
         Close,
         Read,
@@ -91,6 +96,15 @@ pub mod syscalls {
         TimerSetTime,
         TimerGetOverrun,
         Rename,
+        ApplicationLaunch,
+        ApplicationInitComplete,
+        ApplicationBeginExit,
+        ApplicationFinishExit,
+        DlOpen,
+        DlSym,
+        DlClose,
+        DlFinish,
+        DlExit,
         LastNR,
     }
 }

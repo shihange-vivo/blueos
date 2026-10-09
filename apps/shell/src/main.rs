@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#[cfg(not(dynamic_image))]
 extern crate librs;
+#[cfg(not(dynamic_image))]
 extern crate rsrt;
 use std::{
     io::{self, Write},
@@ -20,6 +22,7 @@ use std::{
 };
 
 mod commands;
+mod platform;
 use commands::COMMANDS;
 
 #[cfg(not(enable_vfs))]
@@ -43,7 +46,9 @@ fn shell_loop() {
         print!("> ");
         io::stdout().flush().unwrap();
         let mut input = String::new();
-        io::stdin().read_line(&mut input).unwrap();
+        if io::stdin().read_line(&mut input).unwrap() == 0 {
+            break;
+        }
         let input = input.trim();
         if input == "exit" {
             break;

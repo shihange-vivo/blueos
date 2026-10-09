@@ -20,7 +20,12 @@ build_rust("loader_integration_test") {
   testonly = true
   crate_type = "bin"
   edition = "2021"
-  sources = [ "src/test.rs" ]
+  if (rust_abi_target == "riscv32" || rust_abi_target == "riscv64" ||
+      rust_abi_target == "aarch64-unknown-none") {
+    sources = [ "src/test.rs" ]
+  } else {
+    sources = [ "src/legacy.rs" ]
+  }
   deps = [
     "//external/vendor/semihosting-0.1.20:semihosting",
     "//kernel/kernel:blueos",

@@ -48,6 +48,26 @@ profile = "${build_type}" == "profile"
 
 import("//build/boards/${board}.gni")
 
+declare_args() {
+  # Enable the kernel application runtime, shared libc and dynamic shell.
+  dynamic_loader = defined(board_dynamic_loader) && board_dynamic_loader
+}
+
+declare_args() {
+  # QEMU boot policy: install host artifacts into tmpfs over semihosting.
+  # This can be disabled while keeping the loader and dynamic applications.
+  boot_dynamic_seed = dynamic_loader && defined(board_boot_dynamic_seed) &&
+                      board_boot_dynamic_seed
+}
+
+assert(!dynamic_loader || rust_abi_target == "riscv32" ||
+           rust_abi_target == "riscv64" ||
+           rust_abi_target == "aarch64-unknown-none",
+       "dynamic_loader supports RISC-V and AArch64")
+
+assert(!boot_dynamic_seed || dynamic_loader,
+       "boot_dynamic_seed requires dynamic_loader=true")
+
 # Check if the ${board}.gni is valid.
 assert(defined(board_default_toolchain))
 
