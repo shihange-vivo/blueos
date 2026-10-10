@@ -22,7 +22,6 @@ use crate::tests::fixture::ElfFixtureBuilder;
 mod fixture;
 mod runtime;
 
-#[cfg(target_os = "blueos")]
 use blueos_test_macro::test;
 
 #[test]
@@ -42,7 +41,6 @@ fn fixture_builder_emits_a_parseable_elf64_header() {
 mod soname_relaxation {
     use alloc::vec::Vec;
 
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use goblin::elf::header::{EM_RISCV, ET_DYN};
@@ -134,7 +132,6 @@ mod soname_relaxation {
 /// read-only dependency scan: the scanner must see the same SONAME and
 /// `DT_NEEDED` set the real pipeline would decode, without any allocation.
 mod dependency_scan {
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use goblin::elf::{
@@ -327,7 +324,6 @@ fn fixture_builder_emits_a_parseable_elf32_header() {
 }
 
 mod placement {
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use crate::{
@@ -362,7 +358,6 @@ mod exec_plan {
     use alloc::{rc::Rc, vec::Vec};
     use core::cell::RefCell;
 
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use crate::{
@@ -416,7 +411,6 @@ mod exec_plan {
 }
 
 mod fixed_mapper {
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use crate::{
@@ -495,7 +489,6 @@ mod fixed_mapper {
 mod entry_dispatch {
     use alloc::vec::Vec;
 
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use crate::{load_elf, memory_mapper::MemoryMapper, tests::fixture::ElfFixtureBuilder};
@@ -516,7 +509,6 @@ mod entry_dispatch {
 }
 
 mod arm_admission {
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use goblin::elf::header::{EM_ARM, ET_DYN};
@@ -726,7 +718,6 @@ mod arm_admission {
 }
 
 mod aarch64_profile {
-    #[cfg(target_os = "blueos")]
     use blueos_test_macro::test;
 
     use goblin::elf::header::{EM_AARCH64, EM_RISCV, ET_DYN};

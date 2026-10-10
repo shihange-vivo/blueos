@@ -25,7 +25,6 @@ use alloc::{rc::Rc, sync::Arc, vec::Vec};
 use core::cell::RefCell;
 use goblin::elf::header::{EM_RISCV, ET_DYN};
 
-#[cfg(target_os = "blueos")]
 use blueos_test_macro::test;
 
 fn identity(name: &[u8]) -> ArtifactIdentity {

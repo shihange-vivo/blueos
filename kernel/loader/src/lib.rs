@@ -13,13 +13,10 @@
 // limitations under the License.
 
 #![no_std]
-#![cfg_attr(all(test, target_os = "blueos"), feature(custom_test_frameworks))]
-#![cfg_attr(all(test, target_os = "blueos"), test_runner(loader_test_runner))]
-#![cfg_attr(
-    all(test, target_os = "blueos"),
-    reexport_test_harness_main = "loader_test_main"
-)]
-#![cfg_attr(all(test, target_os = "blueos"), no_main)]
+#![no_main]
+#![cfg_attr(test, feature(custom_test_frameworks))]
+#![cfg_attr(test, test_runner(loader_test_runner))]
+#![cfg_attr(test, reexport_test_harness_main = "loader_test_main")]
 #![feature(c_size_t)]
 #![feature(let_chains)]
 
@@ -319,18 +316,18 @@ pub fn load_elf(buffer: &[u8], mapper: &mut MemoryMapper) -> Result {
     load_elf_from_reader(SliceElfReader::new(buffer), mapper)
 }
 
-#[cfg(all(test, target_os = "blueos"))]
+#[cfg(test)]
 extern crate rsrt;
 
-#[cfg(all(test, target_os = "blueos"))]
+#[cfg(test)]
 use alloc::sync::Arc;
-#[cfg(all(test, target_os = "blueos"))]
+#[cfg(test)]
 use core::sync::atomic::{AtomicUsize, Ordering};
 
 #[cfg(test)]
 mod tests;
 
-#[cfg(all(test, target_os = "blueos"))]
+#[cfg(test)]
 pub fn loader_test_runner(tests: &[&dyn Fn()]) {
     semihosting::println!("Loader unittest started");
     semihosting::println!("Running {} tests", tests.len());
@@ -343,7 +340,7 @@ pub fn loader_test_runner(tests: &[&dyn Fn()]) {
     blueos::coverage::write_coverage_data();
 }
 
-#[cfg(all(test, target_os = "blueos"))]
+#[cfg(test)]
 fn run_loader_tests_on_own_stack() {
     // Debug builds can overflow the 12 KiB main-thread stack in loader decode paths.
     const STACK_SIZE: usize = 64 * 1024;
@@ -366,7 +363,7 @@ fn run_loader_tests_on_own_stack() {
     }
 }
 
-#[cfg(all(test, target_os = "blueos"))]
+#[cfg(test)]
 #[no_mangle]
 extern "C" fn main() -> i32 {
     librs::pthread::register_my_posix_tcb();
